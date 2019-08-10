@@ -17,6 +17,11 @@ shodan_api = shodan.Shodan(SHODAN_API_KEY)
 
 
 def get_shodan_host_banner_info(url):
+    '''
+    下载目标主机网页
+    :param url: 目标主机url
+    :return: 返回网页源内容res.text
+    '''
     try:
         res = requests.get(url=url, headers=HEADERS, timeout=10)
         if res.status_code == 200:
@@ -26,6 +31,11 @@ def get_shodan_host_banner_info(url):
 
 
 def parse_shodan_host_banner_info(ip_address):
+    '''
+    根据传入ip地址调用shodan api进行目标主机信息的查询
+    :param ip_address: 目标主机ip地址
+    :return None:
+    '''
 
     try:
         url = f'https://www.shodan.io/host/{ip_address}'
@@ -89,6 +99,11 @@ def parse_shodan_host_banner_info(ip_address):
 
 
 def searching_shodan(keyword):
+    '''
+    根据传入的关键字,调用shodan api进行目标存活主机进行探测
+    :param keyword: 模糊查询关键字
+    :return None:
+    '''
     try:
         items = shodan_api.search(keyword)
         pprint(f'''
@@ -107,6 +122,11 @@ def searching_shodan(keyword):
 
 
 def lookup_a_host(hostname):
+    '''
+    根据传入的目标存活主机的名称，调用shodan api，对目标主机进行探测
+    :param hostname: 目标主机名称
+    :return None:
+    '''
     try:
         host = shodan_api.host(hostname)
         pprint(f'''
