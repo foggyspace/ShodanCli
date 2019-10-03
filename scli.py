@@ -14,12 +14,14 @@ O = '\033[1;33m'
 B = '\033[1;34m'
 
 
+"""
 def print_help():
     helps = '''
             >>> python scli.py -ip 192.168.2.101
             >>> python scli.py -host www.baidu.com
             >>> python scli.py -search nginx
     '''
+"""
 
 
 def banner():
@@ -34,22 +36,28 @@ def banner():
           '''.format(__version__, __author__) + R)
 
 
+def _set_commandline_options():
+    parsed = argparse.ArgumentParser()
+    parsed.add_argument("-ip", dest="ip", action="store", type=str, help="enter a ip address please.")
+    parsed.add_argument("-host", dest="host", action="store", type=str,
+                        help="enter a host name please.")
+    parsed.add_argument("-search", dest="search", action="store", type=str,
+                        help="enter a search keyword.")
+
+    return parsed.parse_args(), parsed
+
+
 def main():
     '''
     主调函数
     :return: None
     '''
     try:
-        add_parser_argument = argparse.ArgumentParser()
-
-        add_parser_argument.add_argument('-ip', dest='ip', type=str, action='store')
-        add_parser_argument.add_argument('-host', dest='host', type=str, action='store')
-        add_parser_argument.add_argument('-search', dest='search', type=str, action='store')
-
-        parser_args = add_parser_argument.parse_args()
+        parser_args, parsed = _set_commandline_options()
 
         if parser_args.ip is None and parser_args.host is None and parser_args.search is None:
-            print_help()
+            parsed.print_help()
+            parsed.print_usage()
         elif parser_args.ip:
             parse_shodan_host_banner_info(parser_args.ip)
         elif parser_args.host:
@@ -63,3 +71,4 @@ def main():
 if __name__ == '__main__':
     banner()
     main()
+
